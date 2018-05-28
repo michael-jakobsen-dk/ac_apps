@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ac_apps</title>
+
+    <script type="text/javascript" src="/apps/2.1/sdk.js"></script>
+
+    <script type="text/javascript">
+        Rally.onReady(function () {
+                Ext.define("CustomApp",{extend:"Rally.app.App",componentCls:"app",myModels:["PortfolioItem/Feature"],myGrid:void 0,launch:function(){var e=this;console.log("Create new TreeStore"),Ext.create("Rally.data.wsapi.TreeStoreBuilder").build({models:e.myModels,fetch:["Predecessors","FormattedID","Name","Successors","Project","State","Release"],enableHierarchy:!1,scope:e,listeners:{scope:e,load:function(t){var o=t.getRootNode().childNodes;console.log("store:event - load");var r=e._getAllDecessors(o);Deft.Promise.all(r).then({scope:e,success:function(){console.log("_getAllDecessors done"),e.myGrid?(console.log("grid already created, me.myGrid = ",e.myGrid),e.myGrid.getGridOrBoard().getView().refresh()):e._onStoreBuilt(t)}})}}}).then({success:e._loadStore,scope:e})},config:{defaultSettings:{currency:"EUR",costColorLimitYellow:.8}},_getAllDecessors:function(e){console.log("_getAllDecessors()");var t=[];return _.each(e,function(e){e.predecessorStore=e.getCollection("Predecessors"),e.successorStore=e.getCollection("Successors"),e.predecessorStore.initialCount>0&&t.push(e.predecessorStore.load({fetch:["FormattedID","Name","Project","State"]})),e.successorStore.initialCount>0&&t.push(e.successorStore.load({fetch:["FormattedID","Name","Project","State"]}))}),t},_loadStore:function(e){console.log("calling store.load()"),e.load()},getSettingsFields:function(){return[{name:"currency",xtype:"rallytextfield",label:"Currency"},{name:"costColorLimitYellow",xtype:"rallynumberfield",label:"Percent limit for Yellow in cost load"}]},_onStoreBuilt:function(e){var t=this;console.log("_onStoreBuilt: function (store) =  ",e),t.myGrid=t.add({xtype:"rallygridboard",modelNames:t.myModels,toggleState:"grid",stateful:!1,context:t.getContext(),gridConfig:{store:e,columnCfgs:[{xtype:"templatecolumn",align:"left",tpl:Ext.create("Rally.ui.renderer.template.FormattedIDTemplate"),text:"Predecessors",dataIndex:"Predecessors",width:200,renderer:function(e,t,o){console.log("predecessor renderer");var r="",l=o.predecessorStore.getRecords();return _.each(l,function(e){r+=Rally.nav.DetailLink.getLink({record:e,text:e.get("FormattedID"),showTooltip:!0}),r+=" - "+e.get("Name")+"<br>"}),r}},{text:"ID",dataIndex:"FormattedID",width:50},{text:"Name",dataIndex:"Name",flex:1},{text:"Release",dataIndex:"Release"},{text:"State",dataIndex:"State"},{xtype:"templatecolumn",align:"left",tpl:Ext.create("Rally.ui.renderer.template.FormattedIDTemplate"),text:"Successors",dataIndex:"Successors",width:200,renderer:function(e,t,o){var r="",l=o.successorStore.getRecords();return _.each(l,function(e){r+=Rally.nav.DetailLink.getLink({record:e,text:e.get("FormattedID"),showTooltip:!0}),r+=" - "+e.get("Name")+"<br>"}),r}}]},height:t.getHeight()})}});
+
+            Rally.launchApp('CustomApp', {
+                name:"ac_apps",
+                parentRepos:"",
+                version:"0.1.1"
+            });
+
+        });
+    </script>
+
+
+    <style type="text/css">
+        
+    </style>
+</head>
+<body>
+</body>
+</html>
