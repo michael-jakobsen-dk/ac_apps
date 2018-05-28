@@ -131,9 +131,9 @@ Ext.define('CustomApp', {
               gridConfig: {
                 store: store,
                 columnCfgs: [{
-                    xtype: 'templatecolumn',
+                    //xtype: 'templatecolumn',
                     align: 'left',
-                    tpl: Ext.create('Rally.ui.renderer.template.FormattedIDTemplate'),
+                    //tpl: Ext.create('Rally.ui.renderer.template.FormattedIDTemplate'),
                     text: 'Predecessors',
                     dataIndex: 'Predecessors',
                     width: 200,
@@ -176,9 +176,9 @@ Ext.define('CustomApp', {
                     dataIndex: 'State',
                   },
                   { // Column 'Successors'
-                    xtype: 'templatecolumn',
+                    //xtype: 'templatecolumn',
                     align: 'left',
-                    tpl: Ext.create('Rally.ui.renderer.template.FormattedIDTemplate'),
+                    //tpl: Ext.create('Rally.ui.renderer.template.FormattedIDTemplate'),
                     text: 'Successors',
                     dataIndex: 'Successors',
                     width: 200,
@@ -206,6 +206,6 @@ Ext.define('CustomApp', {
               }, //gridConfig
               height: me.getHeight()
             });
-          //console.log("me.myGrid = ", me.myGrid);
-        }
+        },
+
       });
